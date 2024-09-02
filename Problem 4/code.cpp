@@ -22,6 +22,16 @@ struct Society_Record {
 
 typedef Society_Record SR;
 
+SR* pointToNode(SR* start, string Aadhar) {
+    SR* ptr = start;
+    while (ptr != nullptr) {
+        if (ptr->Aadhar==Aadhar)
+            return ptr;
+        ptr = ptr->next;
+    }
+    return nullptr;
+}
+
 bool DATEValidity(int day, int month, int year) {
     if (year > 2024 || day < 1 || day > 31 || month < 1 || month > 12) {
         return false;
@@ -101,23 +111,23 @@ void InsertRecord(SR*& start) {
     if (!VerifyAadhar(start, Aadhar))
         return;
 
-    SR* SocietyResident = new SR;
-    SocietyResident->Aadhar = Aadhar;
-    SocietyResident->next = nullptr;
-    SocietyResident->prev = nullptr;
+    SR* NewResident = new SR;
+    NewResident->Aadhar = Aadhar;
+    NewResident->next = nullptr;
+    NewResident->prev = nullptr;
 
-    InputDetails(SocietyResident);
+    InputDetails(NewResident);
 
     if (start == NULL) {
-        start = SocietyResident;
+        start = NewResident;
     }
     else {
         SR* ptr = start;
         while (ptr->next != NULL) {
             ptr = ptr->next;
         }
-        ptr->next = SocietyResident;
-        SocietyResident->prev = ptr;
+        ptr->next = NewResident;
+        NewResident->prev = ptr;
     }
     cout << "Resident Record Added." << endl;
 }
@@ -148,6 +158,65 @@ void DeleteRecord(SR*& start, const string& Aadhar) {
     }
 }
 
+void updateRecord(SR*& start, const string& Aadhar) {
+    SR* ptr = pointToNode(start, Aadhar);
+
+    if (ptr == nullptr) {
+        cout << "Record Not Found!" << endl;
+        return;
+    }
+
+    cout << "Updating Record for Aadhar: " << Aadhar << endl;
+    InputDetails(ptr);
+
+    cout << "Resident Record updated." << endl;
+}
+
+void SortRecords(SR*& start)
+{
+    if (start==nullptr)
+        return;
+    
+    bool swapped;
+    do
+    {
+        swapped=false;
+        SR* ptr= start;
+        while (ptr->next!=nullptr)
+        {
+            if (ptr->name >ptr->next->name)
+            {
+                swap(ptr->name,ptr->next->name);
+                swap(ptr->Aadhar ,ptr->next->Aadhar);
+                swap(ptr->Father_Name,ptr->next->Father_Name);
+                swap(ptr->Mother_Name,ptr->next->Mother_Name);
+                swap(ptr->gender,ptr->next->gender);
+                swap(ptr->DOB,ptr->next->DOB);
+                swapped=true;
+            }
+            ptr=ptr->next;
+        }
+    } while (swapped);
+    cout<<"Records Sorted Successfully."<<endl;
+}
+
+void FindRecord(SR*&ptr)
+{
+    if (ptr==nullptr)
+    {
+        cout<<"Record Not Found!"<<endl;
+        return;
+    }
+    cout<<"------------------------------------------------";
+    cout<<"Resident Name: "<<ptr->name<<endl;
+    cout<<"Aadhar No.: "<<ptr->Aadhar<<endl;
+    cout<<"Father's name: "<<ptr->Father_Name<<endl;
+    cout<<"Mother's name: "<<ptr->Mother_Name<<endl;
+    cout<<"gender: "<<ptr->gender<<endl;
+    cout<<"Date Of Birth: "<<ptr->DOB.day<<"-"<<ptr->DOB.month<<"-"<<ptr->DOB.year<<endl;
+    cout<<"------------------------------------------------";
+
+}
 int main() {
     int z;
     SR* ptr = NULL;
