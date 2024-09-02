@@ -4,14 +4,6 @@
 #include <cctype> // For isdigit function
 using namespace std;
 
-void LogFile(const string &txt)
-{
-    ofstream log_file("logfile.txt",ios_base::out|ios_base::app);
-    log_file<<txt<<endl;
-}
-
-
-
 struct dateOfBirth {
     int day, year, month;
 };
@@ -31,37 +23,29 @@ struct Society_Record {
 typedef Society_Record SR;
 
 bool DATEValidity(int day, int month, int year) {
-    LogFile("Check if Date Prompts by User are Correct or Not");
     if (year > 2024 || day < 1 || day > 31 || month < 1 || month > 12) {
-        LogFile("Invalid Date added, retry.");
         return false;
     }
     if ((month == 4 || month == 6 || month == 9 || month == 11) && day > 30) {
-        LogFile("Invalid Date added, retry.");
         return false;
     }
     if (month == 2) {
         bool leapyear = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
         if (day > (leapyear ? 29 : 28)) {
-            LogFile("Invalid Date added, retry.");
             return false;
         }
     }
-    LogFile("Date Prompt is added.");
     return true;
 }
 
 bool VerifyAadhar(SR*& start, const string& Aadhar) {
-    LogFile("Check if Aadhar number is exactly 12 digits and all characters are numeric");
     if (Aadhar.length() != 12) {
         cout << "Aadhar must be exactly 12 digits long.\n";
-        LogFile("Invalid value added, retry.");
         return false;
     }
     for (char c : Aadhar) {
         if (!isdigit(c)) {
             cout << "Aadhar must contain only digits.\n";
-            LogFile("Invalid value added, retry.");
             return false;
         }
     }
@@ -69,12 +53,10 @@ bool VerifyAadhar(SR*& start, const string& Aadhar) {
     while (ptr != nullptr) {
         if (ptr->Aadhar == Aadhar) {
             cout << "Aadhar already exists. Insertion failed.\n";
-            LogFile("Invalid value added, retry.");
             return false;
         }
         ptr = ptr->next;
     }
-    LogFile("Aadhar Prompt is added.");
     return true;
 }
 
@@ -88,23 +70,18 @@ bool STRValidity(const string& str) {
 void InputDetails(SR* ptr) {
     cin.ignore();
     do {
-        LogFile("Check If Name is prompted correctly");
         cout << "\nName: "; getline(cin, ptr->name);
     } while (!STRValidity(ptr->name));
     do {
-        LogFile("Check If Gender is prompted correctly");
         cout << "\nGender (M/F): ";
         cin.getline(ptr->gender, 3); // Allow space for the null terminator
     } while (ptr->gender[0] != 'M' && ptr->gender[0] != 'F' && ptr->gender[0] != 'm' && ptr->gender[0] != 'f');
 
     do {
-        LogFile("Check If Father Name is prompted correctly"); 
         cout << "\nFather Name: "; getline(cin, ptr->Father_Name);
     } while (!STRValidity(ptr->Father_Name));
 
-
     do {
-        LogFile("Check if Mother Name is Prompted correctly");
         cout << "\nMother Name: "; getline(cin, ptr->Mother_Name);
     } while (!STRValidity(ptr->Mother_Name));
 
@@ -119,9 +96,8 @@ void InputDetails(SR* ptr) {
 }
 
 void InsertRecord(SR*& start) {
-    LogFile("Entering Aadhar Number");
     string Aadhar;
-    cout << "\nAadhar Number (12 digits): "; getline(cin,Aadhar);
+    cout << "\nAadhar Number (12 digits): "; getline(cin, Aadhar);
     if (!VerifyAadhar(start, Aadhar))
         return;
 
@@ -134,10 +110,8 @@ void InsertRecord(SR*& start) {
 
     if (start == NULL) {
         start = SocietyResident;
-        LogFile("List was Empty");
     }
     else {
-        LogFile("New node has been attached to it's consecutive nodes.");
         SR* ptr = start;
         while (ptr->next != NULL) {
             ptr = ptr->next;
@@ -146,51 +120,36 @@ void InsertRecord(SR*& start) {
         SocietyResident->prev = ptr;
     }
     cout << "Resident Record Added." << endl;
-    LogFile( "Resident Record Added." );
 }
 
-void DeleteRecord(SR*&start,const string& Aadhar)
-{
-
-    if (start==NULL)
-    {
-        LogFile("List is Empty. UnderFlow observed.");
-        cout<<"List is Empty. UnderFlow observed."<<endl;
+void DeleteRecord(SR*& start, const string& Aadhar) {
+    if (start == NULL) {
+        cout << "List is Empty. UnderFlow observed." << endl;
         return;
     }
-    SR*ptr=start;
-    while (ptr!=NULL)
-    {
-        if (ptr->Aadhar==Aadhar)
-        {
+    SR* ptr = start;
+    while (ptr != NULL) {
+        if (ptr->Aadhar == Aadhar) {
             //check if it's not first
-            if(ptr->prev!=NULL){
-                LogFile("Assigning previous node to the node's next.");
-                ptr->prev->next=ptr->next;
-
+            if (ptr->prev != NULL) {
+                ptr->prev->next = ptr->next;
             }
             else
-                LogFile("Starting node is assigned to the node's next");
-                start=ptr->next;
-            if (ptr->next!=NULL)
-            {
-                LogFile("Assigning next node to the node's previous.");
-                ptr->next->prev=ptr->prev;
+                start = ptr->next;
+            if (ptr->next != NULL) {
+                ptr->next->prev = ptr->prev;
             }
-            
+
             delete ptr;
-            LogFile("Resident Record Deleted Successfully.");
-            cout<<"Resident Record Deleted."<<endl;
+            cout << "Resident Record Deleted." << endl;
             return;
         }
-        LogFile("traverse to next node.");
-        ptr=ptr->next;
+        ptr = ptr->next;
     }
 }
 
 int main() {
     int z;
-    LogFile("Starting Program.");
     SR* ptr = NULL;
     while (true) {
         cout << "ABC SOCIETY RESIDENT RECORD DATABASE MANAGER" << endl;
@@ -198,24 +157,21 @@ int main() {
         cin >> z;
         switch (z) {
         case 1:
-        LogFile("Insert a Resident Record.");
             InsertRecord(ptr);
             break;
         case 2:
-            LogFile("Delete a Resident Record:");
             {
                 string Aadhar;
                 cin.ignore();
-                cout<<"Enter the Aadhar No. of the Required resident record.";
-                getline(cin,Aadhar);
-                DeleteRecord(ptr,Aadhar);
+                cout << "Enter the Aadhar No. of the Required resident record.";
+                getline(cin, Aadhar);
+                DeleteRecord(ptr, Aadhar);
             }
+            break;
         case 6:
-            LogFile("Closing Society Resident Database Manager.");
             return 0;
         default:
             cout << "Invalid Option. Please choose again." << endl;
-            LogFile("Program closed abruptly due to error.");
             break;
         }
     }
