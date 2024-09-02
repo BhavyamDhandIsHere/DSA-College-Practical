@@ -1,0 +1,17 @@
+Starting Program.
+Insert a Resident Record.
+Entering Aadhar Number
+Check if Aadhar number is exactly 12 digits and all characters are numeric
+Aadhar Prompt is added.
+Check If Name is prompted correctly
+Check If Name is prompted correctly
+Check If Gender is prompted correctly
+Check If Father Name is prompted correctly
+Check if Mother Name is Prompted correctly
+Check if Date Prompts by User are Correct or Not
+Date Prompt is added.
+List was Empty
+Resident Record Added.
+Delete a Resident Record:
+traverse to next node.
+Closing Society Resident Database Manager.
