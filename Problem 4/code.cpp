@@ -8,9 +8,9 @@ struct dateOfBirth {
     int day, year, month;
 };
 struct Society_Record {
-    int Aadhar; // Aadhar is a string of digits
+    int Aadhar; 
     string name;
-    char gender[3];
+    string gender;
     string Father_Name;
     string Mother_Name;
     dateOfBirth DOB;
@@ -21,7 +21,7 @@ struct Society_Record {
 
 typedef Society_Record SR;
 
-SR* pointToNode(SR* start, int Aadhar) {
+SR* pointToNode(SR* start,long long int Aadhar) {
     SR* ptr = start;
     while (ptr != nullptr) {
         if (ptr->Aadhar==Aadhar)
@@ -45,15 +45,17 @@ bool DATEValidity(int day, int month, int year) {
     }
     return true;
 }
-bool VerifyAadhar(SR*& start, const int& Aadhar) {
-    if (Aadhar<100000000000||Aadhar>999999999999) {
-        cout << "Aadhar must be exactly 12 digits long.\n";
-        return false;
+bool VerifyAadhar(SR*& start, const long long int& Aadhar) {
+    if (Aadhar<100000000000||Aadhar<999999999999)
+    {
+        cout<<"Aadhar No. must be 12 digits long:"<<endl;
+        
     }
+    
     SR* ptr = start;
     while (ptr != nullptr) {
         if (ptr->Aadhar == Aadhar) {
-            cout << "Aadhar already exists. Insertion failed.\n";
+            cout << "Aadhar No. already exists. Insertion failed.\n";
             return false;
         }
         ptr = ptr->next;
@@ -72,9 +74,9 @@ void InputDetails(SR* ptr) {
         cout << "\nName: "; getline(cin, ptr->name);
     } while (!STRValidity(ptr->name));
     do {
-        cout << "\nGender (M/F): ";
-        cin.getline(ptr->gender, 3); // Allow space for the null terminator
-    } while (ptr->gender[0] != 'M' && ptr->gender[0] != 'F' && ptr->gender[0] != 'm' && ptr->gender[0] != 'f');
+        cout << "\nGender (male/female/other): ";
+        getline(cin,ptr->gender); // Allow space for the null terminator
+    } while (ptr->gender!="male"&&ptr->gender!="female"&&ptr->gender!="other");
 
     do {
         cout << "\nFather Name: "; getline(cin, ptr->Father_Name);
@@ -94,8 +96,8 @@ void InputDetails(SR* ptr) {
     }
 }
 void InsertRecord(SR*& start) {
-    int Aadhar;
-    cout << "\nAadhar Number (12 digits): "; cin>>Aadhar;
+    long long int Aadhar;
+    cout << "\nAadhar No. Number (12 digits): "; cin>>Aadhar;
     if (!VerifyAadhar(start, Aadhar))
         return;
 
@@ -119,7 +121,7 @@ void InsertRecord(SR*& start) {
     }
     cout << "Resident Record Added." << endl;
 }
-void DeleteRecord(SR*& start, const int& Aadhar) {
+void DeleteRecord(SR*& start, const long long int& Aadhar) {
     if (start == NULL) {
         cout << "List is Empty. UnderFlow observed." << endl;
         return;
@@ -144,7 +146,7 @@ void DeleteRecord(SR*& start, const int& Aadhar) {
         ptr = ptr->next;
     }
 }
-void updateRecord(SR*& start, const int& Aadhar) {
+void updateRecord(SR*& start, const long long int& Aadhar) {
     SR* ptr = pointToNode(start, Aadhar);
 
     if (ptr == nullptr) {
@@ -152,7 +154,7 @@ void updateRecord(SR*& start, const int& Aadhar) {
         return;
     }
 
-    cout << "Updating Record for Aadhar: " << Aadhar << endl;
+    cout << "Updating Record for Aadhar No.: " << Aadhar << endl;
     InputDetails(ptr);
 
     cout << "Resident Record updated." << endl;
@@ -215,7 +217,7 @@ int main() {
             break;
         case 2:
             {
-                int Aadhar;
+                long long int Aadhar;
                 cout << "Enter the Aadhar No. of the Required resident record.";
                 cin>>Aadhar;
                 DeleteRecord(ptr, Aadhar);
@@ -223,7 +225,7 @@ int main() {
             break;
         case 3:
             {
-                int Aadhar;
+                long long int Aadhar;
                 cin.ignore();
                 cout<<"Enter Aadhar No. to Update credentials: "; cin>>Aadhar;
                 updateRecord(ptr,Aadhar);
@@ -234,8 +236,8 @@ int main() {
             break;
         case 5:
             {
-                int Aadhar;
-                cout<<"Enter Aadhar no. to Print the Credentials: ";cin>>Aadhar;
+                long long int Aadhar;
+                cout<<"Enter Aadhar No. to Print the Credentials: ";cin>>Aadhar;
                 cin.ignore();
                 FindRecord(pointToNode(ptr,Aadhar));
             }
