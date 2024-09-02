@@ -8,7 +8,7 @@ struct dateOfBirth {
     int day, year, month;
 };
 struct Society_Record {
-    string Aadhar; // Aadhar is a string of digits
+    int Aadhar; // Aadhar is a string of digits
     string name;
     char gender[3];
     string Father_Name;
@@ -21,7 +21,7 @@ struct Society_Record {
 
 typedef Society_Record SR;
 
-SR* pointToNode(SR* start, string Aadhar) {
+SR* pointToNode(SR* start, int Aadhar) {
     SR* ptr = start;
     while (ptr != nullptr) {
         if (ptr->Aadhar==Aadhar)
@@ -45,16 +45,10 @@ bool DATEValidity(int day, int month, int year) {
     }
     return true;
 }
-bool VerifyAadhar(SR*& start, const string& Aadhar) {
-    if (Aadhar.length() != 12) {
+bool VerifyAadhar(SR*& start, const int& Aadhar) {
+    if (Aadhar<100000000000||Aadhar>999999999999) {
         cout << "Aadhar must be exactly 12 digits long.\n";
         return false;
-    }
-    for (char c : Aadhar) {
-        if (!isdigit(c)) {
-            cout << "Aadhar must contain only digits.\n";
-            return false;
-        }
     }
     SR* ptr = start;
     while (ptr != nullptr) {
@@ -100,8 +94,8 @@ void InputDetails(SR* ptr) {
     }
 }
 void InsertRecord(SR*& start) {
-    string Aadhar;
-    cout << "\nAadhar Number (12 digits): "; getline(cin, Aadhar);
+    int Aadhar;
+    cout << "\nAadhar Number (12 digits): "; cin>>Aadhar;
     if (!VerifyAadhar(start, Aadhar))
         return;
 
@@ -125,7 +119,7 @@ void InsertRecord(SR*& start) {
     }
     cout << "Resident Record Added." << endl;
 }
-void DeleteRecord(SR*& start, const string& Aadhar) {
+void DeleteRecord(SR*& start, const int& Aadhar) {
     if (start == NULL) {
         cout << "List is Empty. UnderFlow observed." << endl;
         return;
@@ -150,7 +144,7 @@ void DeleteRecord(SR*& start, const string& Aadhar) {
         ptr = ptr->next;
     }
 }
-void updateRecord(SR*& start, const string& Aadhar) {
+void updateRecord(SR*& start, const int& Aadhar) {
     SR* ptr = pointToNode(start, Aadhar);
 
     if (ptr == nullptr) {
@@ -190,7 +184,7 @@ void SortRecords(SR*& start)
     } while (swapped);
     cout<<"Records Sorted Successfully."<<endl;
 }
-void FindRecord(SR*&ptr)
+void FindRecord(SR*ptr)
 {
     if (ptr==nullptr)
     {
@@ -214,17 +208,36 @@ int main() {
         cout << "ABC SOCIETY RESIDENT RECORD DATABASE MANAGER" << endl;
         cout << "Choose a Command:\n1. Insert a Record \n2. Delete a Record  \n3. Update a Record \n4. Keep the Records in sorted order\n5. Find a Record\n6. QUIT PROGRAM\n";
         cin >> z;
+        cin.ignore();
         switch (z) {
         case 1:
             InsertRecord(ptr);
             break;
         case 2:
             {
-                string Aadhar;
-                cin.ignore();
+                int Aadhar;
                 cout << "Enter the Aadhar No. of the Required resident record.";
-                getline(cin, Aadhar);
+                cin>>Aadhar;
                 DeleteRecord(ptr, Aadhar);
+            }
+            break;
+        case 3:
+            {
+                int Aadhar;
+                cin.ignore();
+                cout<<"Enter Aadhar No. to Update credentials: "; cin>>Aadhar;
+                updateRecord(ptr,Aadhar);
+            }
+            break;
+        case 4:
+            SortRecords(ptr);
+            break;
+        case 5:
+            {
+                int Aadhar;
+                cout<<"Enter Aadhar no. to Print the Credentials: ";cin>>Aadhar;
+                cin.ignore();
+                FindRecord(pointToNode(ptr,Aadhar));
             }
             break;
         case 6:
