@@ -7,7 +7,6 @@ using namespace std;
 struct dateOfBirth {
     int day, year, month;
 };
-
 struct Society_Record {
     string Aadhar; // Aadhar is a string of digits
     string name;
@@ -31,7 +30,6 @@ SR* pointToNode(SR* start, string Aadhar) {
     }
     return nullptr;
 }
-
 bool DATEValidity(int day, int month, int year) {
     if (year > 2024 || day < 1 || day > 31 || month < 1 || month > 12) {
         return false;
@@ -47,7 +45,6 @@ bool DATEValidity(int day, int month, int year) {
     }
     return true;
 }
-
 bool VerifyAadhar(SR*& start, const string& Aadhar) {
     if (Aadhar.length() != 12) {
         cout << "Aadhar must be exactly 12 digits long.\n";
@@ -69,14 +66,12 @@ bool VerifyAadhar(SR*& start, const string& Aadhar) {
     }
     return true;
 }
-
 bool STRValidity(const string& str) {
     for (char c : str) {
         if (!isalpha(c) && c != '.' && c != ' ') return false;
     }
     return true;
 }
-
 void InputDetails(SR* ptr) {
     cin.ignore();
     do {
@@ -104,7 +99,6 @@ void InputDetails(SR* ptr) {
         else cout << "Invalid date. Please enter again.\n";
     }
 }
-
 void InsertRecord(SR*& start) {
     string Aadhar;
     cout << "\nAadhar Number (12 digits): "; getline(cin, Aadhar);
@@ -131,7 +125,6 @@ void InsertRecord(SR*& start) {
     }
     cout << "Resident Record Added." << endl;
 }
-
 void DeleteRecord(SR*& start, const string& Aadhar) {
     if (start == NULL) {
         cout << "List is Empty. UnderFlow observed." << endl;
@@ -157,7 +150,6 @@ void DeleteRecord(SR*& start, const string& Aadhar) {
         ptr = ptr->next;
     }
 }
-
 void updateRecord(SR*& start, const string& Aadhar) {
     SR* ptr = pointToNode(start, Aadhar);
 
@@ -171,7 +163,6 @@ void updateRecord(SR*& start, const string& Aadhar) {
 
     cout << "Resident Record updated." << endl;
 }
-
 void SortRecords(SR*& start)
 {
     if (start==nullptr)
@@ -199,7 +190,6 @@ void SortRecords(SR*& start)
     } while (swapped);
     cout<<"Records Sorted Successfully."<<endl;
 }
-
 void FindRecord(SR*&ptr)
 {
     if (ptr==nullptr)
