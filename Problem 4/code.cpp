@@ -210,15 +210,23 @@ void PrintDatabase(SR*start)
     while (ptr!=NULL)
     {
         FindRecord(ptr);
+        ptr=ptr->next;
     }
     
 }
 void GenerateReport(SR*start)
 {
     SR*ptr=start;
-    cout<<"Generate Report from\n\t1.Aadhar Card or\n\t2.Name"<<endl;
+    if (ptr==NULL)
+    {
+        cout<<"Database is empty."<<endl;
+        return;
+    }
+    
     int t;
+    cout<<"Generate Report from\n\t1.Aadhar Card or\n\t2.Name"<<endl;
     cin>>t;
+    cin.ignore();
     switch (t)
     {
     case 1:
@@ -258,6 +266,17 @@ void GenerateReport(SR*start)
         break;
     }
 }
+
+void FreeMemory(SR*& start) {
+    SR* ptr = start;
+    while (ptr != nullptr) {
+        SR* temp = ptr;
+        ptr = ptr->next;
+        delete temp;
+    }
+    start = nullptr;
+}
+
 
 int main() {
     int z;
@@ -304,6 +323,7 @@ int main() {
             GenerateReport(ptr);
             break;
         case 8:
+            FreeMemory(ptr);
             return 0;
         default:
             cout << "Invalid Option. Please choose again." << endl;
