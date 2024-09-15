@@ -8,7 +8,7 @@ struct dateOfBirth {
     int day, year, month;
 };
 struct Society_Record {
-    int Aadhar; 
+    long long int Aadhar; 
     string name;
     string gender;
     string Father_Name;
