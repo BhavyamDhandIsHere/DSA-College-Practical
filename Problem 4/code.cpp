@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <cmath>
 #include <cctype> // For isdigit function
 using namespace std;
 
@@ -46,10 +47,10 @@ bool DATEValidity(int day, int month, int year) {
     return true;
 }
 bool VerifyAadhar(SR*& start, const long long int& Aadhar) {
-    if (Aadhar<100000000000||Aadhar<999999999999)
+    if (Aadhar < 100000000000 || Aadhar > 999999999999)
     {
         cout<<"Aadhar No. must be 12 digits long:"<<endl;
-        
+        return false;
     }
     
     SR* ptr = start;
@@ -200,15 +201,70 @@ void FindRecord(SR*ptr)
     cout<<"Mother's name: "<<ptr->Mother_Name<<endl;
     cout<<"gender: "<<ptr->gender<<endl;
     cout<<"Date Of Birth: "<<ptr->DOB.day<<"-"<<ptr->DOB.month<<"-"<<ptr->DOB.year<<endl;
-    cout<<"------------------------------------------------";
+    cout<<"------------------------------------------------"<<endl;
 
 }
+void PrintDatabase(SR*start)
+{
+    SR*ptr=start;
+    while (ptr!=NULL)
+    {
+        FindRecord(ptr);
+    }
+    
+}
+void GenerateReport(SR*start)
+{
+    SR*ptr=start;
+    cout<<"Generate Report from\n\t1.Aadhar Card or\n\t2.Name"<<endl;
+    int t;
+    cin>>t;
+    switch (t)
+    {
+    case 1:
+        {
+            long long int AA;
+            cout<<"Enter Aadhar No.: "; cin>>AA;
+            ptr=pointToNode(ptr,AA);
+            cout<<"REPORT OF RESIDENT WITH AADHAR NO.: "<<ptr->Aadhar<<endl;
+            cout<<"------------------------------------------------"<<endl;
+            cout<<"Resident Name: "<<ptr->name<<endl;
+            cout<<"Father's name: "<<ptr->Father_Name<<endl;
+            cout<<"Mother's name: "<<ptr->Mother_Name<<endl;
+            cout<<"gender: "<<ptr->gender<<endl;
+            cout<<"Date Of Birth: "<<ptr->DOB.day<<"-"<<ptr->DOB.month<<"-"<<ptr->DOB.year<<endl;
+            cout<<"------------------------------------------------"<<endl;
+        }
+        break;
+    case 2:
+        {
+            string name;
+            cout<<"Enter Name:"; getline(cin,name);
+            while (ptr!=NULL)
+            {
+                if (ptr->name==name)
+                    break;
+                ptr=ptr->next;
+            }
+            cout<<"REPORT OF RESIDENT WITH NAME: "<<ptr->name<<endl;
+            cout<<"------------------------------------------------"<<endl;
+            cout<<"Father's name: "<<ptr->Father_Name<<endl;
+            cout<<"gender: "<<ptr->gender<<endl;
+            cout<<"------------------------------------------------"<<endl;
+        }
+        break;
+    default:
+        cout<<"Invalid Case:"<<endl;
+        break;
+    }
+}
+
 int main() {
     int z;
     SR* ptr = NULL;
     while (true) {
         cout << "ABC SOCIETY RESIDENT RECORD DATABASE MANAGER" << endl;
-        cout << "Choose a Command:\n1. Insert a Record \n2. Delete a Record  \n3. Update a Record \n4. Keep the Records in sorted order\n5. Find a Record\n6. QUIT PROGRAM\n";
+        cout << "Choose a Command:\n1. Insert a Record \n2. Delete a Record  \n3. Update a Record \n4. Keep the Records in sorted order\n5. Find a Record\n6. Print Whole Database\n7. Generate Report for One Member \n8. QUIT PROGRAM\n";
         cin >> z;
         cin.ignore();
         switch (z) {
@@ -243,6 +299,11 @@ int main() {
             }
             break;
         case 6:
+            PrintDatabase(ptr);
+        case 7:
+            GenerateReport(ptr);
+            break;
+        case 8:
             return 0;
         default:
             cout << "Invalid Option. Please choose again." << endl;
