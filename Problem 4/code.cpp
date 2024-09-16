@@ -3,7 +3,20 @@
 #include <fstream>
 #include <cmath>
 #include <cctype> // For isdigit function
+#include <ctime>
 using namespace std;
+
+void LogEvent(const string& event) {
+    ofstream logfile("society_log.txt", ios_base::app); // Open in append mode
+    if (logfile.is_open()) {
+        time_t now = time(0);
+        char* dt = ctime(&now); // Convert to string format
+        logfile << dt << " : " << event << endl;
+        logfile.close();
+    } else {
+        cout << "Error opening log file!" << endl;
+    }
+}
 
 struct dateOfBirth {
     int day, year, month;
@@ -121,6 +134,7 @@ void InsertRecord(SR*& start) {
         NewResident->prev = ptr;
     }
     cout << "Resident Record Added." << endl;
+    LogEvent("Inserted record for Aadhar No.: " + to_string(Aadhar));
 }
 void DeleteRecord(SR*& start, const long long int& Aadhar) {
     if (start == NULL) {
@@ -142,6 +156,7 @@ void DeleteRecord(SR*& start, const long long int& Aadhar) {
 
             delete ptr;
             cout << "Resident Record Deleted." << endl;
+            LogEvent("Deleted record for Aadhar No.: " + to_string(Aadhar));
             return;
         }
         ptr = ptr->next;
@@ -159,6 +174,7 @@ void updateRecord(SR*& start, const long long int& Aadhar) {
     InputDetails(ptr);
 
     cout << "Resident Record updated." << endl;
+    LogEvent("Updated record for Aadhar No.: " + to_string(Aadhar));
 }
 void SortRecords(SR*& start)
 {
@@ -186,6 +202,8 @@ void SortRecords(SR*& start)
         }
     } while (swapped);
     cout<<"Records Sorted Successfully."<<endl;
+
+    LogEvent("Sorted the records by name.");
 }
 void FindRecord(SR*ptr)
 {
@@ -206,6 +224,7 @@ void FindRecord(SR*ptr)
 }
 void PrintDatabase(SR*start)
 {
+    cout<<"Printing The Database: "<<endl;
     SR*ptr=start;
     while (ptr!=NULL)
     {
@@ -242,6 +261,7 @@ void GenerateReport(SR*start)
             cout<<"gender: "<<ptr->gender<<endl;
             cout<<"Date Of Birth: "<<ptr->DOB.day<<"-"<<ptr->DOB.month<<"-"<<ptr->DOB.year<<endl;
             cout<<"------------------------------------------------"<<endl;
+            LogEvent("Generated report for Aadhar No.: " + to_string(ptr->Aadhar));
         }
         break;
     case 2:
@@ -259,6 +279,7 @@ void GenerateReport(SR*start)
             cout<<"Father's name: "<<ptr->Father_Name<<endl;
             cout<<"gender: "<<ptr->gender<<endl;
             cout<<"------------------------------------------------"<<endl;
+            LogEvent("Generated report for resident named: " + ptr->name);
         }
         break;
     default:
@@ -266,25 +287,32 @@ void GenerateReport(SR*start)
         break;
     }
 }
-
-void FreeMemory(SR*& start) {
-    SR* ptr = start;
-    while (ptr != nullptr) {
-        SR* temp = ptr;
-        ptr = ptr->next;
-        delete temp;
+void FreeMemory(SR*&start)
+{
+    SR*ptr;
+    while (start!=nullptr)
+    {
+        ptr=start;
+        start=start->next;
+        delete ptr;
     }
-    start = nullptr;
+    // Log event
+    LogEvent("Freed all allocated memory and exited the program.");
 }
-
 
 int main() {
     int z;
     SR* ptr = NULL;
     while (true) {
-        cout << "ABC SOCIETY RESIDENT RECORD DATABASE MANAGER" << endl;
-        cout << "Choose a Command:\n1. Insert a Record \n2. Delete a Record  \n3. Update a Record \n4. Keep the Records in sorted order\n5. Find a Record\n6. Print Whole Database\n7. Generate Report for One Member \n8. QUIT PROGRAM\n";
-        cin >> z;
+        cout << "\n\n\t--------------------------------------\n\t    SOCIETY RESIDENT DATABASE\n\t--------------------------------------" << endl;
+        cout << "1. Insert a Record" << endl;
+        cout << "2. Delete a Record" << endl;
+        cout << "3. Update a Record" << endl;
+        cout << "4. Sort Records" << endl;
+        cout << "5. Find a Record & Print the Database" << endl;
+        cout << "6. Generate Report for One Member" << endl;
+        cout << "7. Quit Program" << endl;
+        cout << "Please Enter your choice (1-7): ";        cin >> z;
         cin.ignore();
         switch (z) {
         case 1:
@@ -307,7 +335,9 @@ int main() {
             }
             break;
         case 4:
+            PrintDatabase(ptr);
             SortRecords(ptr);
+            PrintDatabase(ptr);
             break;
         case 5:
             {
@@ -318,7 +348,7 @@ int main() {
             }
             break;
         case 6:
-            PrintDatabase(ptr);
+
         case 7:
             GenerateReport(ptr);
             break;
