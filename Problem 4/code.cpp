@@ -169,7 +169,7 @@ void updateRecord(SR*& start, const long long int& Aadhar) {
         cout << "Record Not Found!" << endl;
         return;
     }
-
+    cin.ignore();
     cout << "Updating Record for Aadhar No.: " << Aadhar << endl;
     InputDetails(ptr);
 
@@ -329,7 +329,6 @@ int main() {
         case 3:
             {
                 long long int Aadhar;
-                cin.ignore();
                 cout<<"Enter Aadhar No. to Update credentials: "; cin>>Aadhar;
                 updateRecord(ptr,Aadhar);
             }
@@ -348,11 +347,9 @@ int main() {
             }
             break;
         case 6:
-
-        case 7:
             GenerateReport(ptr);
             break;
-        case 8:
+        case 7:
             FreeMemory(ptr);
             return 0;
         default:
