@@ -169,7 +169,6 @@ void updateRecord(SR*& start, const long long int& Aadhar) {
         cout << "Record Not Found!" << endl;
         return;
     }
-    cin.ignore();
     cout << "Updating Record for Aadhar No.: " << Aadhar << endl;
     InputDetails(ptr);
 
