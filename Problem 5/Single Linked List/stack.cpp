@@ -35,9 +35,8 @@ void push(ST*&start, int& val)
         start=newNode;
     else
     {
-        ST*ptr=start;
-        newNode->next=ptr;
-        ptr=newNode;
+        newNode->next=start;
+        start=newNode;
     }
     cout<<"Item Pushed!"<<endl;
     LogFile("Pushed value " + to_string(val));
@@ -74,7 +73,7 @@ void traverse(ST*& Start)
         cout<<"Traversed List will be:"<<endl;
         while (ptr!=NULL)
         {
-            cout<<ptr->x;
+            cout<<ptr->x<<" ";
             ptr=ptr->next;
         }
         return;
@@ -113,7 +112,7 @@ int main()
         switch (z)
         {
         case 1:
-        LogFile("Call Push Function");
+            LogFile("Call Push Function");
             {
                 int value;
                 cout<<"Enter Value to Push: "; cin>>value;
@@ -122,7 +121,7 @@ int main()
             break;
         case 2:
             LogFile("Call Pop Function");
-            pop(ptr);
+            cout<<pop(ptr)<<endl;
             break;
         case 3:
             LogFile("Call Traverse Function");
@@ -130,7 +129,7 @@ int main()
             break;
         case 4:
             LogFile("Call Peek Function");
-            peek(ptr);
+            cout<<peek(ptr)<<endl;
             break;
         case 5:
             LogFile("Close File");

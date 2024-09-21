@@ -37,6 +37,7 @@ void insertElement(int Q[],int info,int size,int &R, int &F)
     }
     ++R;
     Q[R]=info;
+    LogFile("Inserted "+ to_string(info)+" In Queue ");
     return;
 }
 void deleteElement(int Q[],int &R, int &F)
@@ -58,8 +59,7 @@ void deleteElement(int Q[],int &R, int &F)
         item=Q[F];
         ++F;
     }
-    
-    
+    LogFile("Deleted Element from Queue");
 }
 void Traverse(int Q[], int size, int R, int F)
 {
@@ -75,11 +75,11 @@ void Traverse(int Q[], int size, int R, int F)
         cout<<Q[x]<<endl;
         ++x;
     }
-    
-
+    LogFile("Traverse Queue");
 }
 int main()
 {
+    LogFile("Open File");
     int queue[maxsize],front=-1,rear=-1,z;
     while (true)
     {
@@ -93,6 +93,7 @@ int main()
         switch (z)
         {
         case 1:
+            LogFile("Call InsertElement Function");
             {
                 int info;
                 cout<<"Enter info you want to enter: ";cin>>info;
@@ -100,9 +101,11 @@ int main()
             }
             break;
         case 2:
+            LogFile("Call InsertElement Function");
             deleteElement(queue,rear,front);
             break;
         case 3:
+            LogFile("Call Traverse Function");
             Traverse(queue,maxsize,rear,front);
             break;
         case 4:

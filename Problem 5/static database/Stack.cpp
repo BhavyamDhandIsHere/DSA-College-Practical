@@ -5,7 +5,6 @@
 #include <ctime>
 #include <bitset>
 using namespace std;
-
 void LogFile(const string& event) {
     ofstream BinFile("Machine_Code_Stack.txt",ios_base::app);
     if (BinFile.is_open())
@@ -19,19 +18,21 @@ void LogFile(const string& event) {
     }
     
 }
-
 const int SIZE=10;
 bool IsFull(int size,int& Tos)
 {
+    LogFile("Stack is Full");
     return(Tos==size-1);
 }
 bool IsEmpty(int& Tos)
 {
+    LogFile("Stack is Empty");
     return(Tos==-1);
 }
 void Push(int Stack[],int size,int& Tos,int info)
 {
     // To check if Stack is full
+    LogFile("Pushed Value " +to_string(info)+" to Stack");
     if (IsFull(size,Tos))
     {
         cout<<"\nStack Overflow!"<<endl;
@@ -39,10 +40,10 @@ void Push(int Stack[],int size,int& Tos,int info)
     }
     else
         Stack[++Tos]=info;
-    
 }
 int pop(int Stack[],int &Tos)
 {
+    LogFile("Popped Value from Stack");
     // To check if Stack is Empty
     if (IsEmpty(Tos))
     {
@@ -50,7 +51,7 @@ int pop(int Stack[],int &Tos)
         return 0;
     }
     else
-        return Stack[Tos--];    
+        return Stack[Tos--];
 }
 void traverse(int Stack[], int BStack[], int size, int& Tos, int& BTos) {
     if (IsEmpty(Tos)) {
@@ -77,10 +78,12 @@ void traverse(int Stack[], int BStack[], int size, int& Tos, int& BTos) {
     }
 
     Tos = tempTos; // Restore original Tos
+    LogFile("traversing List");
 }
 
 int Peek(int Stack[],int& Tos)
 {
+    LogFile("Peeked List");
     if (IsEmpty(Tos))
     {
         cout<<"\nStack Underflow!"<<endl;
@@ -90,6 +93,7 @@ int Peek(int Stack[],int& Tos)
 }
 int main()
 {
+    LogFile("Open File");
     int ToS=-1,BToS=-1;
     int S[SIZE],BS[SIZE];
     int z;
@@ -105,6 +109,7 @@ int main()
         switch (z)
         {
         case 1:
+            LogFile("Call Push Function");
             {
                 int info;
                 cout<<"Enter info you want to push in Stack: "; cin>>info;
@@ -112,20 +117,25 @@ int main()
             }
             break;
         case 2:
+            LogFile("Call Pop Function");
             pop(S,ToS);
             break;
         case 3:
+            LogFile("Call Traverse Function");
             traverse(S,BS,SIZE,ToS,BToS);
             break;
         case 4:
+            LogFile("Call Peek Function");
             cout<<Peek(S,ToS)<<endl<<endl;
             break;
         case 5:
+            LogFile("Close File");
             return 0;
         default:
+            LogFile("Force to close File");
             cout<<"Entered Invalid Option."<<endl;
+            return 0;
             break;
         }
     }
 }
-
