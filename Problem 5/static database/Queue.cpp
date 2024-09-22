@@ -35,29 +35,57 @@ void insertElement(int Q[],int info,int size,int &R, int &F)
         F=R=0;
         Q[R]=info;
     }
-    ++R;
-    Q[R]=info;
+    else{
+        ++R;
+        Q[R]=info;
+        for (int i = R; i > F; i--)
+        {
+            if (Q[i] < Q[i - 1])
+            {
+                swap(Q[i], Q[i - 1]);
+            }
+        }
+    }
+    
     LogFile("Inserted "+ to_string(info)+" In Queue ");
     return;
 }
-void deleteElement(int Q[],int &R, int &F)
+void deleteElement(int Q[], int &R, int &F, int data)
 {
-    int item;
-    // empty queue check
-    if (F==-1||F>R)
+    // Empty queue check
+    if (F == -1 || F > R)
     {
-        cout<<"Underflow!"<<endl;
+        cout << "Underflow!" << endl;
         return;
-    }
-    else if (F==R) //Single element
-    {
-        item=Q[F];
-        F=-1;R=-1;
     }
     else
     {
-        item=Q[F];
-        ++F;
+        int i = F;
+        bool found = false;
+        // Search for the element
+        for (; i <= R; i++)
+        {
+            if (Q[i] == data)
+            {
+                found = true;
+                break;
+            }
+        }
+        if (!found)
+        {
+            cout << "Element not found!" << endl;
+            return;
+        }
+        // Shift elements left to remove the found element
+        for (int j = i; j < R; j++)
+        {
+            Q[j] = Q[j + 1];
+        }
+        R--; // Reduce the rear index
+        if (R < F)
+        {
+            F = R = -1; // Queue becomes empty
+        }
     }
     LogFile("Deleted Element from Queue");
 }
@@ -70,7 +98,7 @@ void Traverse(int Q[], int size, int R, int F)
     }
     int x=F;
     cout<<"Elements of Queue will be: "<<endl;
-    while (x<R)
+    while (x <= R)
     {
         cout<<Q[x]<<endl;
         ++x;
@@ -102,7 +130,11 @@ int main()
             break;
         case 2:
             LogFile("Call InsertElement Function");
-            deleteElement(queue,rear,front);
+            {
+                int info;
+                cout<<"enter element to be deleted:"; cin>>info;
+                deleteElement(queue,rear,front,info);
+            } 
             break;
         case 3:
             LogFile("Call Traverse Function");

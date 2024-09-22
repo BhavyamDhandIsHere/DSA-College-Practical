@@ -29,51 +29,109 @@ struct Node
 
 typedef Node Q;
 
-// Insert element at the rear of the queue
+// Insert element in a sorted position
 void insertElement(Q*& F, Q*& R, int data)
 {
     Q* NewNode = new Q;
     NewNode->num = data;
     NewNode->next = NULL;
-    NewNode->prev = R;  // The new node's previous pointer points to the current rear
+    NewNode->prev = NULL;
 
+    // Case 1: If the list is empty
     if (F == NULL && R == NULL)
     {
-        // If the queue is empty, both front and rear will point to the new node
         F = R = NewNode;
     }
     else
     {
-        // Update the current rear's next to point to the new node
-        R->next = NewNode;
-        // Move rear to the new node
-        R = NewNode;
+        Q* temp = F;
+
+        // Case 2: Insertion at the front (smallest element)
+        if (data < F->num)
+        {
+            NewNode->next = F;
+            F->prev = NewNode;
+            F = NewNode;
+        }
+        else
+        {
+            // Traverse the list to find the correct position
+            while (temp != NULL && temp->num <= data)
+            {
+                temp = temp->next;
+            }
+
+            // Case 3: Insertion at the end (largest element)
+            if (temp == NULL)
+            {
+                NewNode->prev = R;
+                R->next = NewNode;
+                R = NewNode;
+            }
+            else
+            {
+                // Case 4: Insertion in the middle
+                NewNode->next = temp;
+                NewNode->prev = temp->prev;
+                temp->prev->next = NewNode;
+                temp->prev = NewNode;
+            }
+        }
     }
 
-    LogFile("Inserted element: " + to_string(data));
+    LogFile("Inserted element in sorted order: " + to_string(data));
 }
 
-// Delete element from the front of the queue
-void deleteElement(Q*& F, Q*& R)
+// Delete element with a specific value
+void deleteByValue(Q*& F, Q*& R, int data)
 {
     if (F == NULL)
     {
-        cout << "Queue underflow" << endl;
-        LogFile("Queue underflow - Delete failed");
+        cout << "Queue is empty, cannot delete." << endl;
+        LogFile("Queue underflow - Delete by value failed");
         return;
     }
 
     Q* temp = F;
 
-    if (F == R) // Queue has only one node
+    // Traverse the list to find the node with the given value
+    while (temp != NULL && temp->num != data)
     {
-        F = R = NULL;
+        temp = temp->next;
     }
+
+    // Case 1: Element not found
+    if (temp == NULL)
+    {
+        cout << "Element " << data << " not found in the queue." << endl;
+        LogFile("Element not found in the queue - Delete failed");
+        return;
+    }
+
+    // Case 2: Deleting the first node
+    if (temp == F)
+    {
+        F = F->next;
+        if (F != NULL)
+        {
+            F->prev = NULL;
+        }
+        else
+        {
+            R = NULL; // The list becomes empty
+        }
+    }
+    // Case 3: Deleting the last node
+    else if (temp == R)
+    {
+        R = R->prev;
+        R->next = NULL;
+    }
+    // Case 4: Deleting from the middle
     else
     {
-        // Move front to the next node and update its previous to NULL
-        F = F->next;
-        F->prev = NULL;
+        temp->prev->next = temp->next;
+        temp->next->prev = temp->prev;
     }
 
     cout << "Deleted element: " << temp->num << endl;
@@ -81,8 +139,8 @@ void deleteElement(Q*& F, Q*& R)
     delete temp;
 }
 
-// Traverse the queue and print elements from front to rear
-void Traverse(Q*& F, Q*& R)
+// Traverse the queue from front to rear
+void Traverse(Q*& F)
 {
     if (F == NULL)
     {
@@ -102,7 +160,7 @@ void Traverse(Q*& F, Q*& R)
 }
 
 // Traverse the queue in reverse from rear to front
-void TraverseReverse(Q*& F, Q*& R)
+void TraverseReverse(Q*& R)
 {
     if (R == NULL)
     {
@@ -134,10 +192,10 @@ int main()
     {
         cout << "\n\nWelcome to Queue Manager\n\n" << endl;
         cout << "Select Commands" << endl;
-        cout << "1. Insert element" << endl;
-        cout << "2. Delete element" << endl;
+        cout << "1. Insert element (sorted)" << endl;
+        cout << "2. Delete element by value" << endl;
         cout << "3. Traverse and Reverse Traverse Queue" << endl;
-        cout << "5. Quit Program\n\n" << endl;
+        cout << "4. Quit Program\n\n" << endl;
         cout << "Choose Your Command: "; 
         cin >> z;
 
@@ -149,13 +207,17 @@ int main()
                 insertElement(front, rear, data);
                 break;
             case 2:
-                deleteElement(front, rear);
+                cout << "Enter element to delete: ";
+                cin >> data;
+                deleteByValue(front, rear, data);
                 break;
             case 3:
-                Traverse(front, rear);
-                TraverseReverse(front, rear);
+                cout << "Queue from front to rear: ";
+                Traverse(front);
+                cout << "Queue from rear to front: ";
+                TraverseReverse(rear);
                 break;
-            case 5:
+            case 4:
                 LogFile("Exiting Program");
                 exit(0);
             default:

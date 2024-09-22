@@ -34,22 +34,45 @@ void insertElement(Q*& F, Q*& R, int data)
     NewNode->num = data;
     NewNode->next = NULL;
 
-    // Check if the queue is empty
+    // If the queue is empty, set front and rear
     if (F == NULL && R == NULL)
     {
         F = R = NewNode;
     }
-    else
+    else if (data < F->num)  // Insert at the front
     {
-        R->next = NewNode;
-        R = NewNode;
+        NewNode->next = F;
+        F = NewNode;
+    }
+    else // Insert in the sorted position
+    {
+        Q* temp = F;
+        Q* prev = NULL;
+
+        // Traverse to find the correct position
+        while (temp != NULL && temp->num <= data)
+        {
+            prev = temp;
+            temp = temp->next;
+        }
+
+        // Insert in the middle or at the end
+        prev->next = NewNode;
+        NewNode->next = temp;
+
+        // If inserted at the end, update the rear pointer
+        if (temp == NULL)
+        {
+            R = NewNode;
+        }
     }
 
     LogFile("Inserted element: " + to_string(data));
 }
 
+
 // Delete element from the queue
-void deleteElement(Q*& F, Q*& R)
+void deleteElement(Q*& F, Q*& R, int data)
 {
     if (F == NULL)
     {
@@ -59,13 +82,44 @@ void deleteElement(Q*& F, Q*& R)
     }
 
     Q* temp = F;
-    if (F == R) // Queue has only one node
-    {
-        F = R = NULL;
-    }
-    else
+    Q* prev = NULL;
+
+    // If the element to be deleted is the first element
+    if (F->num == data)
     {
         F = F->next;
+        // If it was the only element in the queue
+        if (F == NULL)
+        {
+            R = NULL;  // The queue is now empty
+        }
+        cout << "Deleted element: " << temp->num << endl;
+        LogFile("Deleted element: " + to_string(temp->num));
+        delete temp;
+        return;
+    }
+
+    // Traverse to find the element to delete
+    while (temp != NULL && temp->num != data)
+    {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    if (temp == NULL) // Element not found
+    {
+        cout << "Element not found in the queue" << endl;
+        LogFile("Element not found in the queue - Delete failed");
+        return;
+    }
+
+    // Unlink the node from the list
+    prev->next = temp->next;
+
+    // If the node to be deleted is the last node, update the rear pointer
+    if (temp == R)
+    {
+        R = prev;
     }
 
     cout << "Deleted element: " << temp->num << endl;
@@ -74,7 +128,7 @@ void deleteElement(Q*& F, Q*& R)
 }
 
 // Traverse the queue and print elements
-void Traverse(Q*& F, Q*& R)
+void Traverse(Q* F)
 {
     if (F == NULL)
     {
@@ -83,6 +137,7 @@ void Traverse(Q*& F, Q*& R)
         return;
     }
 
+    cout << "Queue elements: ";
     Q* temp = F;
     while (temp != NULL)
     {
@@ -121,10 +176,12 @@ int main()
                 insertElement(front, rear, data);
                 break;
             case 2:
-                deleteElement(front, rear);
+                cout << "Enter element to delete: ";
+                cin >> data;
+                deleteElement(front, rear,data);
                 break;
             case 3:
-                Traverse(front, rear);
+                Traverse(front);
                 break;
             case 4:
                 LogFile("Exiting Program");
