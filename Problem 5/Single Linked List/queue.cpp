@@ -66,7 +66,6 @@ void insertElement(Q*& F, Q*& R, int data)
             R = NewNode;
         }
     }
-
     LogFile("Inserted element: " + to_string(data));
 }
 
