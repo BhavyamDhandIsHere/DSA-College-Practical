@@ -166,7 +166,8 @@ void RadixSort(int *arr, int n) {
 }
 
 int main() {
-    int n, choice, x;
+    int n, choice, x,z;
+    int linIndex;
     cout << "Enter the size of Array: ";
     cin >> n;
 
@@ -193,13 +194,18 @@ int main() {
     while (Sorted!=true)
     {
         cout << "Select the Operation you want to execute on the Array:" << endl;
-        cout << "1. Linear Search\n2. Binary Search\n3. Insertion Sort\n4. Bubble Sort\n5. Quick Sort\n6. Radix Sort\n7.Exit Program" << endl;
+        cout << "1. Linear Search\n2. Binary Search\n3. Insertion Sort\n4. Selection Sort\n5. Bubble Sort\n6. Radix Sort\n7. Quick Sort\n8.Exit Program" << endl;
         cin >> choice;
         switch (choice) {
         case 1://Linear Search
-            cout << "Select element you want to Search Linearly: "; cin >> x;
-            if (LinSearch(array, n, x)!=-1)
-                cout << "Element lies in Index: " << LinSearch(array, n, x) << endl;
+            cout << "Select element you want to Search Linearly: "; 
+            cin >> x;
+            // Call LinSearch once and store the result
+            linIndex = LinSearch(array, n, x); 
+            if (linIndex != -1)
+                cout << "Element found at Index: " << linIndex << endl;
+            else
+                cout << "Element not found!" << endl;
             break;
         case 2://Binary Search
             cout << "Select element you want to Search Binarily: "; cin >> x;
@@ -219,8 +225,8 @@ int main() {
             OutFile << endl;
             Sorted=true;
             break;
-        case 4://Bubble Sort
-            BubbleSort(array, n);
+        case 4://Selection Sort
+            SelectionSort(array, n);
             cout << "Sorted Array:" << endl;
             for (int i = 0; i < n; i++) {
                 cout << *(array + i) << " ";
@@ -232,9 +238,9 @@ int main() {
             OutFile << endl;
             Sorted=true;
             break;
-        case 5://Quick Sort
-            QuickSort(array, 0, n - 1);
-            cout << "Sorted Array using Quick Sort:" << endl;
+        case 5://Bubble Sort
+            BubbleSort(array, n);
+            cout << "Sorted Array:" << endl;
             for (int i = 0; i < n; i++) {
                 cout << *(array + i) << " ";
             }
@@ -258,7 +264,20 @@ int main() {
             OutFile << endl;
             Sorted=true;
             break;
-        case 7://Exit Program
+        case 7://Quick Sort
+            QuickSort(array, 0, n - 1);
+            cout << "Sorted Array using Quick Sort:" << endl;
+            for (int i = 0; i < n; i++) {
+                cout << *(array + i) << " ";
+            }
+            cout << endl;
+            for (int i = 0; i < n; i++) {
+                OutFile << *(array + i) << " ";
+            }
+            OutFile << endl;
+            Sorted=true;
+            break;
+        case 8://Exit Program
             OutFile.close();
             delete[] array;
             return 0;
