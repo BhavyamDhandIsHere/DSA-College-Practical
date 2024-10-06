@@ -188,71 +188,84 @@ int main() {
     for (int i = 0; i < n; i++) {
         LogFile(to_string(*(array + i)) + " ");
     }
-
-    cout << "Select the Operation you want to execute on the Array:" << endl;
-    cout << "1. Linear Search\n2. Binary Search\n3. Insertion Sort\n4. Bubble Sort\n5. Quick Sort\n6. Radix Sort" << endl;
-    cin >> choice;
     ofstream OutFile("NewArray.txt");
-    switch (choice) {
-    case 1:
-        cout << "Select element you want to Search Linearly: "; cin >> x;
-        cout << "Element lies in Index: " << LinSearch(array, n, x) << endl;
-        break;
-    case 2:
-        cout << "Select element you want to Search Binarily: "; cin >> x;
-        cout << "Element lies in Index: " << BinSearch(array, n, x) << endl;
-        break;
-    case 3:
-        InsertionSort(array, n);
-        cout << "Sorted Array:" << endl;
-        for (int i = 0; i < n; i++) {
-            cout << *(array + i) << " ";
+    bool Sorted=false;
+    while (Sorted!=true)
+    {
+        cout << "Select the Operation you want to execute on the Array:" << endl;
+        cout << "1. Linear Search\n2. Binary Search\n3. Insertion Sort\n4. Bubble Sort\n5. Quick Sort\n6. Radix Sort\n7.Exit Program" << endl;
+        cin >> choice;
+        switch (choice) {
+        case 1://Linear Search
+            cout << "Select element you want to Search Linearly: "; cin >> x;
+            if (LinSearch(array, n, x)!=-1)
+                cout << "Element lies in Index: " << LinSearch(array, n, x) << endl;
+            break;
+        case 2://Binary Search
+            cout << "Select element you want to Search Binarily: "; cin >> x;
+            if (BinSearch(array, n, x)!=-1)
+                cout << "Element lies in Index: " << BinSearch(array, n, x) << endl;
+            break;
+        case 3://Insertion Sort
+            InsertionSort(array, n);
+            cout << "Sorted Array:" << endl;
+            for (int i = 0; i < n; i++) {
+                cout << *(array + i) << " ";
+            }
+            cout << endl;
+            for (int i = 0; i < n; i++) {
+                OutFile << *(array + i) << " ";
+            }
+            OutFile << endl;
+            Sorted=true;
+            break;
+        case 4://Bubble Sort
+            BubbleSort(array, n);
+            cout << "Sorted Array:" << endl;
+            for (int i = 0; i < n; i++) {
+                cout << *(array + i) << " ";
+            }
+            cout << endl;
+            for (int i = 0; i < n; i++) {
+                OutFile << *(array + i) << " ";
+            }
+            OutFile << endl;
+            Sorted=true;
+            break;
+        case 5://Quick Sort
+            QuickSort(array, 0, n - 1);
+            cout << "Sorted Array using Quick Sort:" << endl;
+            for (int i = 0; i < n; i++) {
+                cout << *(array + i) << " ";
+            }
+            cout << endl;
+            for (int i = 0; i < n; i++) {
+                OutFile << *(array + i) << " ";
+            }
+            OutFile << endl;
+            Sorted=true;
+            break;
+        case 6://Radix Sort
+            RadixSort(array, n);
+            cout << "Sorted Array using Radix Sort:" << endl;
+            for (int i = 0; i < n; i++) {
+                cout << *(array + i) << " ";
+            }
+            cout << endl;
+            for (int i = 0; i < n; i++) {
+                OutFile << *(array + i) << " ";
+            }
+            OutFile << endl;
+            Sorted=true;
+            break;
+        case 7://Exit Program
+            OutFile.close();
+            delete[] array;
+            return 0;
+        default:
+            cout << "Invalid choice!" << endl;
+            break;
         }
-        cout << endl;
-        for (int i = 0; i < n; i++) {
-            OutFile << *(array + i) << " ";
-        }
-        OutFile << endl;
-        break;
-    case 4:
-        BubbleSort(array, n);
-        cout << "Sorted Array:" << endl;
-        for (int i = 0; i < n; i++) {
-            cout << *(array + i) << " ";
-        }
-        cout << endl;
-        for (int i = 0; i < n; i++) {
-            OutFile << *(array + i) << " ";
-        }
-        OutFile << endl;
-        break;
-    case 5:
-        QuickSort(array, 0, n - 1);
-        cout << "Sorted Array using Quick Sort:" << endl;
-        for (int i = 0; i < n; i++) {
-            cout << *(array + i) << " ";
-        }
-        cout << endl;
-        for (int i = 0; i < n; i++) {
-            OutFile << *(array + i) << " ";
-        }
-        OutFile << endl;
-        break;
-    case 6:
-        RadixSort(array, n);
-        cout << "Sorted Array using Radix Sort:" << endl;
-        for (int i = 0; i < n; i++) {
-            cout << *(array + i) << " ";
-        }
-        cout << endl;
-        for (int i = 0; i < n; i++) {
-            OutFile << *(array + i) << " ";
-        }
-        OutFile << endl;
-        break;
-    default:
-        cout << "Invalid choice!" << endl;
-        break;
     }
     OutFile.close();
     delete[] array;
