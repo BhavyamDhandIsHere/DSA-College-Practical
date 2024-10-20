@@ -23,8 +23,8 @@ void LogFile(const string& event) {
 int *CreateArray(ifstream &A, int n) {
     int x, i = 0, *arr = new int[n];
     while (A >> x && i < n) {
-        *(arr + i) = x;
         i++;
+        *(arr + i) = x;
     }
     return arr;
 }
