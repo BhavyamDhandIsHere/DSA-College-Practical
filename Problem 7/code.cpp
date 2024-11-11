@@ -115,6 +115,16 @@ void PostOrder(BTree* head)
     PostOrder(head->RST);
     cout << head->Data << " ";
 }
+//To Make Binary Tree from Traversals
+
+
+
+
+
+
+
+
+
 
 void DeleteTree(BTree* head)
 {
