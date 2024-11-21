@@ -1,7 +1,8 @@
 #include <bits/stdc++.h>
 #include <vector>
 using namespace std;
-const int MAX_KEYS=4,MIN_KEYS=2;
+#define MAX_KEYS 4
+#define MIN_KEYS 2 
 //AVL DATA STRUCTURE
 //Representation of AVL
 struct AVL
@@ -21,7 +22,7 @@ AVL* createAVLNode(int data) {
     return node;
 }
 //Finding Height of node
-int height(AVL* &node) {
+int height(AVL* node) {
     return node ? node->height : 0;
 }
 // Get balance factor of node
@@ -148,7 +149,7 @@ AVL* DeleteAVL(AVL* root, int key)
 
     return root;
 }
-AVL* search(AVL* root, int key)
+AVL* AVLsearch(AVL* root, int key)
 {
 
     // Base Cases: root is null or key is
@@ -158,10 +159,10 @@ AVL* search(AVL* root, int key)
 
     // Key is greater than root's key
     if (root->key < key)
-        return search(root->right, key);
+        return AVLsearch(root->right, key);
 
     // Key is smaller than root's key
-    return search(root->left, key);
+    return AVLsearch(root->left, key);
 }
 void preOrder(AVL *root)
 {
@@ -254,50 +255,55 @@ BTreeNode* insertBTree(BTreeNode* root, int key) {
         return root;
     }
 }
-BTreeNode *search(BTreeNode* root,int k)
+BTreeNode *BTreeSearch(BTreeNode* root,int k)
 {
     int i=0;
     while (i<root->numKeys&&k>root->keys[i])    i++;
     if (root->keys[i]==k)   return root;
     if(root->isLeaf)    return NULL;
-    return search(root->children[i],k);
+    return BTreeSearch(root->children[i],k);
 }
 
-void remove(BTreeNode* root,int k)
-{
-    if (!root)
-    {
-        cout << "The tree is empty\n";
+void remove(BTreeNode* root, int key) {
+    if (!root) {
+        cout << "Tree is empty." << endl;
         return;
     }
 
-    // Call the remove function for root
-    remove(root,k);
-
-    // If the root node has 0 keys, make its first child as the new root
-    //  if it has a child, otherwise set root as NULL
-    if (root->numKeys==0)
-    {
-        BTreeNode *tmp = root;
-        if (root->isLeaf)
-            root = NULL;
-        else
-            root = root->children[0];
-
-        // Free the old root
-        delete tmp;
-    }
-    return;
-}
-
-// Function to traverse and print the tree
-void printBTree(BTreeNode* node) {
-    if (node != nullptr) {
-        for (int i = 0; i < node->numKeys; i++) {
-            if (!node->isLeaf) printBTree(node->children[i]);
-            std::cout << node->keys[i] << " ";
+    // Handle deletion for non-root node and root node
+    if (root->isLeaf) {
+        // Handle key deletion for leaf nodes (simple case)
+        for (int i = 0; i < root->numKeys; i++) {
+            if (root->keys[i] == key) {
+                // Shift all keys after the deleted key
+                for (int j = i; j < root->numKeys - 1; j++) {
+                    root->keys[j] = root->keys[j + 1];
+                }
+                root->numKeys--;
+                return;
+            }
         }
-        if (!node->isLeaf) printBTree(node->children[node->numKeys]);
+    } else {
+        // Recursive deletion logic for internal nodes
+        // You would need to handle cases like merging or redistributing nodes here
+    }
+}
+// Function to traverse and print the tree
+void inorderTraversal(BTreeNode* node) {
+    if (node != nullptr) {
+        // Traverse all children and print keys between them
+        for (int i = 0; i < node->numKeys; i++) {
+            // Recur for the left child
+            if (!node->isLeaf)
+                inorderTraversal(node->children[i]);
+            
+            // Print the current key
+            cout << node->keys[i] << " ";
+        }
+        
+        // Visit the rightmost child
+        if (!node->isLeaf)
+            inorderTraversal(node->children[node->numKeys]);
     }
 }
 
@@ -320,7 +326,9 @@ int main() {
         cout << "4. Delete from B-Tree\n";
         cout << "5. Display AVL Tree\n";
         cout << "6. Display B-Tree\n";
-        cout << "7. Exit\n";
+        cout << "7. Search into AVL Tree\n";
+        cout << "8. Search into B-Tree\n";
+        cout << "9. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
         switch (choice) {
@@ -353,10 +361,18 @@ int main() {
                 break;
             case 6:
                 cout << "B Tree: ";
-                printBTree(Broot);
+                inorderTraversal(Broot);
                 cout << endl;
                 break;
             case 7:
+                cout<<"Enter Value to be searched in AVL: "; cin>>value;
+                if(AVLsearch(Aroot,value)!=NULL) cout<<"Found "<<value<<" in AVL Tree at Level: "<<height(AVLsearch(Aroot,value));
+                break;
+            case 8:
+                cout<<"Enter Value to be searched in B Tree: "; cin>>value;
+                if (BTreeSearch(Broot,value)!=NULL) cout<<"Found "<<value<<" in B Tree.";
+                break;
+            case 9:
                 cout << "Exiting program." << endl;
                 return 0;
         }
