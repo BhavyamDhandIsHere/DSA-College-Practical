@@ -132,32 +132,36 @@ int main()
     
     int a[10]={10,20,30,40,50,60},x,v,n=6;
     print(a,n);
-    cout<<"Choose what operation you want to execute for the Array:\n1:Add an element to Array\n2:Insert/Add an element at the desired location in the array\n3:Delete an ELement from the Array\n4:Update an Element associated with a pocket of an array\n5: Find Max and Min of Array"<<endl;
+    cout<<"Choose what operation you want to execute for the Array:\n1:Add an element to Array\n2:Insert/Add an element at the desired location in the array\n3:Delete an ELement from the Array\n4:Update an Element associated with a pocket of an array\n5: Find Max and Min of Array\n6: Quit Program"<<endl;
     cin>>x;
-    switch (x)
+    while (true)
     {
-    case 1:
-        cout<<"Enter whatever value you want to add in an array: ";
-        cin>>v;
-        Add(a,n,v);
-        break;
-    case 2:
-        cout<<"Enter whatever value you want to add in an array: ";
-        cin>>v;
-        Insert(a,n,v);
-        break;
-    case 3:
-        Delete(a,n);
-        break;
-    case 4:
-        Update(a,n);
-        break;
-    case 5:
-        max_or_min(a,n);
-        break;
-    default:
-    cout<<"Insufficient Input. Try Again.";
-        break;
+       switch (x)
+        {
+        case 1:
+            cout<<"Enter whatever value you want to add in an array: ";
+            cin>>v;
+            Add(a,n,v);
+            break;
+        case 2:
+            cout<<"Enter whatever value you want to add in an array: ";
+            cin>>v;
+            Insert(a,n,v);
+            break;
+        case 3:
+            Delete(a,n);
+            break;
+        case 4:
+            Update(a,n);
+            break;
+        case 5:
+            max_or_min(a,n);
+            break;
+        case 6:
+            return 0;
+        default:
+        cout<<"Insufficient Input. Try Again.";
+            break;
+        }
     }
-    return 0;
 }
